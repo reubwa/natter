@@ -24,5 +24,10 @@
         <a asp-area="Identity" asp-page="/Account/Manage/Index" class="btn btn-outline-primary">Edit profile</a>
     }
 </div>
+
+@foreach (var post in Model.Posts)
+{
+    <partial name="_Post" model="post" />
+}
 </body>
 </html>

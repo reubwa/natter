@@ -1,14 +1,30 @@
 using System.Diagnostics;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Natter.Data;
 using Natter.Models;
 
-namespace Natter.Controllers;
-
-public class HomeController : Controller
+public class HomeController(ApplicationDbContext db) : Controller
 {
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var posts = await db.Posts
+            .OrderByDescending(p => p.CreatedAt)
+            .Take(50)
+            .Select(p => new PostViewModel
+            {
+                Id = p.Id,
+                Content = p.Content,
+                CreatedAt = p.CreatedAt,
+                AuthorScreenName = p.Author.ScreenName,
+                CanDelete = p.AuthorId == currentUserId
+            })
+            .ToListAsync();
+
+        return View(posts);
     }
 
     public IActionResult Privacy()

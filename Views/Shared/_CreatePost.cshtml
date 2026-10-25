@@ -1,0 +1,7 @@
+@model CreatePostViewModel
+
+<form asp-controller="Posts" asp-action="Create" method="post" class="mb-4">
+    <textarea asp-for="Content" class="form-control" rows="3"
+              maxlength="500" placeholder="What's on your mind?"></textarea>
+    <button type="submit" class="btn btn-primary mt-2">Post</button>
+</form>

@@ -9,4 +9,5 @@ public class ProfileViewModel
     public string? ScreenName { get; set; }
     public DateOnly? BirthDate { get; set; }
     public bool IsOwnProfile { get; set; }
+    public List<PostViewModel> Posts { get; set; } = new();
 }

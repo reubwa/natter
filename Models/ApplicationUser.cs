@@ -17,4 +17,5 @@ public class ApplicationUser : IdentityUser
     public string? ScreenName { get; set; }
     [MaxLength(500)]
     public string? Bio { get; set; }
+    public ICollection<Post> Posts { get; set; } = new List<Post>();
 }
