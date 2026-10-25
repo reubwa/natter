@@ -9,12 +9,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Natter.Models;
 
 namespace Natter.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
+        private static readonly string[] Reserved = { "admin", "support", "login", "register", "api" };
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
@@ -68,6 +70,8 @@ namespace Natter.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Date of Birth")]
             public DateOnly? BirthDate { get; set; }
             
+            [StringLength(30, MinimumLength = 3)]
+            [RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Letters, numbers and underscores only.")]
             [Display(Name = "Screen Name")]
             public string ScreenName { get; set; }
             
@@ -117,6 +121,14 @@ namespace Natter.Areas.Identity.Pages.Account.Manage
             {
                 await LoadAsync(user);
                 return Page();
+            }
+            if (await _userManager.Users.AnyAsync(u => u.ScreenName == Input.ScreenName) || Reserved.Contains(Input.ScreenName))
+            {
+                if (user.ScreenName != Input.ScreenName)
+                {
+                    ModelState.AddModelError("Input.ScreenName", "That screen name is taken.");
+                    return Page();
+                }
             }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);

@@ -1,0 +1,28 @@
+@model ProfileViewModel
+
+@{
+    ViewData["Title"] = $"@{Model.ScreenName}";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+</head>
+<body>
+<div class="card p-4">
+    <h1>@Model.FirstName @Model.LastName</h1>
+    <p class="text-muted">@@@Model.ScreenName · Born on @Model.BirthDate.ToString()</p>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Bio))
+    {
+        <p>@Model.Bio</p>
+    }
+
+    @if (Model.IsOwnProfile)
+    {
+        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="btn btn-outline-primary">Edit profile</a>
+    }
+</div>
+</body>
+</html>

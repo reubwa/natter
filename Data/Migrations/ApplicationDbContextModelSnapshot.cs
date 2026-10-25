@@ -208,7 +208,8 @@ namespace Natter.Data.Migrations
 
                     b.Property<string>("ScreenName")
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .UseCollation("NOCASE");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
@@ -228,6 +229,9 @@ namespace Natter.Data.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("ScreenName")
+                        .IsUnique();
 
                     b.ToTable("AspNetUsers", (string)null);
                 });

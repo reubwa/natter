@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Natter.Models;
 
@@ -24,6 +25,7 @@ namespace Natter.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
+        private static readonly string[] Reserved = { "admin", "support", "login", "register", "api" };
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserStore<ApplicationUser> _userStore;
@@ -84,6 +86,8 @@ namespace Natter.Areas.Identity.Pages.Account
             public DateOnly BirthDate { get; set; }
             
             [Required]
+            [StringLength(30, MinimumLength = 3)]
+            [RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Letters, numbers and underscores only.")]
             [Display(Name = "Screen Name")]
             public string ScreenName { get; set; }
             /// <summary>
@@ -128,6 +132,11 @@ namespace Natter.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                if (await _userManager.Users.AnyAsync(u => u.ScreenName == Input.ScreenName) || Reserved.Contains(Input.ScreenName))
+                {
+                    ModelState.AddModelError("Input.ScreenName", "That screen name is taken.");
+                    return Page();
+                }
                 var user = CreateUser();
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
