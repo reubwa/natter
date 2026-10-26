@@ -13,4 +13,6 @@ public class Post
 
     public string AuthorId { get; set; } = "";
     public ApplicationUser Author { get; set; } = null!;
+    
+    public ICollection<Like> Likes { get; set; } = new List<Like>();
 }

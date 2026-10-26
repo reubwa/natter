@@ -236,6 +236,24 @@ namespace Natter.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Natter.Models.Like", b =>
+                {
+                    b.Property<int>("PostId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("PostId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Likes");
+                });
+
             modelBuilder.Entity("Natter.Models.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -312,6 +330,25 @@ namespace Natter.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Natter.Models.Like", b =>
+                {
+                    b.HasOne("Natter.Models.Post", "Post")
+                        .WithMany("Likes")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Natter.Models.ApplicationUser", "User")
+                        .WithMany("Likes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Natter.Models.Post", b =>
                 {
                     b.HasOne("Natter.Models.ApplicationUser", "Author")
@@ -325,7 +362,14 @@ namespace Natter.Data.Migrations
 
             modelBuilder.Entity("Natter.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("Likes");
+
                     b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("Natter.Models.Post", b =>
+                {
+                    b.Navigation("Likes");
                 });
 #pragma warning restore 612, 618
         }
