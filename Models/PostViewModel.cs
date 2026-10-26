@@ -7,4 +7,6 @@ public class PostViewModel
     public DateTime CreatedAt { get; set; }
     public string AuthorScreenName { get; set; } = "";
     public bool CanDelete { get; set; }
+    public int LikeCount { get; set; }
+    public bool LikedByCurrentUser { get; set; }
 }

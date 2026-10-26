@@ -1,14 +1,44 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@model List<PostViewModel>
+@model HomeViewModel
 
 @if (User.Identity?.IsAuthenticated == true)
 {
     <partial name="_CreatePost" model="new CreatePostViewModel()" />
 }
 
-@foreach (var post in Model)
+<form method="get" asp-controller="Home" asp-action="Index" id="feed-filter">
+    <div class="btn-group mb-3" role="group" aria-label="Feed sort order">
+
+        <input type="radio" class="btn-check" name="sort" id="sort-newest"
+               value="@Enums.FeedSort.Newest" checked="@(Model.Sort == Enums.FeedSort.Newest)" />
+        <label class="btn btn-outline-primary" for="sort-newest">Newest</label>
+
+        <input type="radio" class="btn-check" name="sort" id="sort-oldest"
+               value="@Enums.FeedSort.Oldest" checked="@(Model.Sort == Enums.FeedSort.Oldest)" />
+        <label class="btn btn-outline-primary" for="sort-oldest">Oldest</label>
+
+        <input type="radio" class="btn-check" name="sort" id="sort-mostliked"
+               value="@Enums.FeedSort.MostLiked" checked="@(Model.Sort == Enums.FeedSort.MostLiked)" />
+        <label class="btn btn-outline-primary" for="sort-mostliked">Most Liked</label>
+        
+        <input type="radio" class="btn-check" name="sort" id="sort-following"
+               value="@Enums.FeedSort.Following" checked="@(Model.Sort == Enums.FeedSort.Following)" />
+        <label class="btn btn-outline-primary" for="sort-following">Following</label>
+        
+        <input type="radio" class="btn-check" name="sort" id="sort-followedby"
+               value="@Enums.FeedSort.FollowedBy" checked="@(Model.Sort == Enums.FeedSort.FollowedBy)" />
+        <label class="btn btn-outline-primary" for="sort-followedby">Followed By</label>
+        
+        <input type="radio" class="btn-check" name="sort" id="sort-friends"
+               value="@Enums.FeedSort.Friends" checked="@(Model.Sort == Enums.FeedSort.Friends)" />
+        <label class="btn btn-outline-primary" for="sort-friends">Friends</label>
+    </div>
+</form>
+
+
+@foreach (var post in Model.Posts)
 {
     <partial name="_Post" model="post" />
 }

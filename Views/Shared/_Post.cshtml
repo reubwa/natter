@@ -1,4 +1,6 @@
+@using Microsoft.AspNetCore.Identity
 @model PostViewModel
+@inject SignInManager<ApplicationUser> SignInManager
 
 <div class="card mb-3">
     <div class="card-body">
@@ -10,12 +12,22 @@
         </div>
         <p class="mt-2 mb-0" style="white-space: pre-wrap;">@Model.Content</p>
 
-        @if (Model.CanDelete)
-        {
-            <form asp-controller="Posts" asp-action="Delete" asp-route-id="@Model.Id"
-                  method="post" class="mt-2">
-                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-            </form>
-        }
+        <div class="d-flex flex-row align-items-center gap-2 mt-2">
+            @if (Model.CanDelete)
+            {
+                <form asp-controller="Posts" asp-action="Delete" asp-route-id="@Model.Id"
+                      method="post" class="mt-2 delete-form">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            }
+        
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <form asp-controller="Posts" asp-action="ToggleLike" asp-route-postId="@Model.Id" method="post" class="mt-2 like-form">
+                    <button type="submit" class="btn btn-sm btn-outline-primary">@(Model.LikedByCurrentUser ? "Unlike" : "Like")</button>
+                </form>
+            }
+            <span class="text-muted ms-auto like-count">@Model.LikeCount Likes</span>
+        </div>
     </div>
 </div>

@@ -39,7 +39,9 @@ public class ProfileController(UserManager<ApplicationUser> userManager, Applica
                 Content = p.Content,
                 CreatedAt = p.CreatedAt,
                 AuthorScreenName = p.Author.ScreenName,
-                CanDelete = p.AuthorId == currentUserId
+                CanDelete = p.AuthorId == currentUserId,
+                LikeCount =  p.Likes.Count,
+                LikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId)
             })
             .ToListAsync();
         
