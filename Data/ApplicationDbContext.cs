@@ -9,6 +9,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     public DbSet<Post> Posts => Set<Post>();
     public DbSet<Like> Likes => Set<Like>();
+    public DbSet<Follow> Follows => Set<Follow>();
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -21,6 +22,21 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<ApplicationUser>()
             .HasIndex(u => u.ScreenName)
             .IsUnique();
+
+        builder.Entity<Follow>(b =>
+        {
+
+            b.HasOne(f => f.Follower).WithMany(f => f.Following).HasForeignKey(f => f.FollowerId).OnDelete(DeleteBehavior.Cascade);
+            
+            b.HasOne(f => f.Followee).WithMany(f => f.Followers).HasForeignKey(f => f.FolloweeId).OnDelete(DeleteBehavior.Cascade);
+            
+            b.HasIndex(f => f.FolloweeId);
+            
+            b.ToTable(t => t.HasCheckConstraint(
+                "CK_Follow_NoSelfFollow",
+                "FollowerId <> FolloweeId"));
+            
+        });
         
         builder.Entity<Like>(b =>
         {

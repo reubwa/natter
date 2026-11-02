@@ -236,6 +236,27 @@ namespace Natter.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Natter.Models.Follow", b =>
+                {
+                    b.Property<string>("FollowerId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FolloweeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("FollowerId", "FolloweeId");
+
+                    b.HasIndex("FolloweeId");
+
+                    b.ToTable("Follows", t =>
+                        {
+                            t.HasCheckConstraint("CK_Follow_NoSelfFollow", "FollowerId <> FolloweeId");
+                        });
+                });
+
             modelBuilder.Entity("Natter.Models.Like", b =>
                 {
                     b.Property<int>("PostId")
@@ -330,6 +351,25 @@ namespace Natter.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Natter.Models.Follow", b =>
+                {
+                    b.HasOne("Natter.Models.ApplicationUser", "Followee")
+                        .WithMany("Followers")
+                        .HasForeignKey("FolloweeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Natter.Models.ApplicationUser", "Follower")
+                        .WithMany("Following")
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Followee");
+
+                    b.Navigation("Follower");
+                });
+
             modelBuilder.Entity("Natter.Models.Like", b =>
                 {
                     b.HasOne("Natter.Models.Post", "Post")
@@ -362,6 +402,10 @@ namespace Natter.Data.Migrations
 
             modelBuilder.Entity("Natter.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("Followers");
+
+                    b.Navigation("Following");
+
                     b.Navigation("Likes");
 
                     b.Navigation("Posts");

@@ -3,26 +3,42 @@
 @{
     ViewData["Title"] = $"@{Model.ScreenName}";
 }
-
-<!DOCTYPE html>
-
-<html>
 <head>
 </head>
 <body>
 <div class="card p-4">
     <h1>@Model.FirstName @Model.LastName</h1>
-    <p class="text-muted">@@@Model.ScreenName · Born on @Model.BirthDate.ToString()</p>
-
+    <div class="d-flex flex-row align-items-center gap-2 mt-2">
+        <p class="text-muted">@@@Model.ScreenName</p>
+        @if (Model.BirthDate != null)
+        {
+            <p class="text-muted">Born on @Model.BirthDate.ToString()</p>
+        }
+    </div>
+    <div class="d-flex flex-row align-items-center gap-2 mt-2">
+        <p class="follower-count">@Model.FollowerCount followers</p>
+        <p>Following @Model.FollowingCount</p>
+    </div>
     @if (!string.IsNullOrWhiteSpace(Model.Bio))
     {
         <p>@Model.Bio</p>
     }
-
-    @if (Model.IsOwnProfile)
-    {
-        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="btn btn-outline-primary">Edit profile</a>
-    }
+    <div class="d-flex flex-row align-items-center gap-2 mt-2">
+        @if (Model.IsOwnProfile)
+        {
+            <a asp-area="Identity" asp-page="/Account/Manage/Index" class="btn btn-outline-primary">Edit profile</a>
+        }
+        else
+        {
+            <form asp-controller="Follows" asp-action="Toggle" asp-route-userId="@Model.UserId" method="post" class="mt-2 follow-form">
+                <button type="submit" class="btn btn-sm btn-outline-primary">@(Model.IsFollowedByCurrentUser ? "Unfollow" : "Follow")</button>
+            </form>
+            if (Model.FollowsCurrentUser)
+            {
+                <span class="badge text-bg-info">Follows You</span>
+            }
+        }
+    </div>
 </div>
 
 @foreach (var post in Model.Posts)
@@ -30,4 +46,3 @@
     <partial name="_Post" model="post" />
 }
 </body>
-</html>

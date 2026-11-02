@@ -10,4 +10,9 @@ public class ProfileViewModel
     public DateOnly? BirthDate { get; set; }
     public bool IsOwnProfile { get; set; }
     public List<PostViewModel> Posts { get; set; } = new();
+    public string UserId { get; set; } = "";
+    public int FollowerCount { get; set; }
+    public int FollowingCount { get; set; }
+    public bool IsFollowedByCurrentUser { get; set; }
+    public bool FollowsCurrentUser { get; set; }
 }

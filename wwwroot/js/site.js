@@ -8,12 +8,14 @@ document.getElementById('feed-filter')?.addEventListener('change', (e) => {
 });
 
 document.addEventListener('submit', async (e) => {
-    const form = e.target.closest('form.like-form, form.delete-form');
+    const form = e.target.closest('form.like-form, form.delete-form, form.follow-form');
     if (!form) return;               // ignore every other form
 
     e.preventDefault();              // stop the normal page navigation
 
     const isDelete = form.classList.contains('delete-form');
+    
+    const isFollow = form.classList.contains('follow-form');
 
     if (isDelete && !confirm('Delete this post? This cannot be undone.')) return;
 
@@ -45,6 +47,16 @@ document.addEventListener('submit', async (e) => {
         }
 
         const data = await response.json();
+        
+        if(isFollow) {
+            button.textContent = data.isNowFollowing ? 'Unfollow' : 'Follow';
+            const count = form.closest('.card')?.querySelector('.follower-count');
+            if (count) {
+                count.textContent = `${data.followerCount} followers`;
+            }
+            button.disabled = false;
+            return;
+        }
 
         button.textContent = data.liked ? 'Unlike' : 'Like';
 

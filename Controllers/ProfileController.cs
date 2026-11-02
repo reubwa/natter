@@ -16,7 +16,7 @@ public class ProfileController(UserManager<ApplicationUser> userManager, Applica
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.ScreenName == screenName);
         if (user == null) return NotFound();
-
+        var currentUserId = _userManager.GetUserId(User);
         var vm = new ProfileViewModel
         {
             ScreenName = user.ScreenName,
@@ -24,10 +24,16 @@ public class ProfileController(UserManager<ApplicationUser> userManager, Applica
             LastName = user.LastName,
             BirthDate = user.BirthDate,
             Bio =  user.Bio,
-            IsOwnProfile = User.Identity?.Name == user.UserName
+            IsOwnProfile = User.Identity?.Name == user.UserName,
+            UserId = user.Id,
+            FollowerCount = await _db.Follows.CountAsync(f => f.FolloweeId == user.Id),
+            FollowingCount = await _db.Follows.CountAsync(f => f.FollowerId == user.Id),
+            IsFollowedByCurrentUser = currentUserId != null
+                                      && await _db.Follows.AnyAsync(f => f.FollowerId == currentUserId && f.FolloweeId == user.Id),
+            FollowsCurrentUser = currentUserId != null
+                                 && await _db.Follows.AnyAsync(f => f.FollowerId == user.Id && f.FolloweeId == currentUserId)
         };
         
-        var currentUserId = _userManager.GetUserId(User);
 
         vm.Posts = await _db.Posts
             .Where(p => p.AuthorId == user.Id)

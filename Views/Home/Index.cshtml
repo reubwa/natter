@@ -22,18 +22,20 @@
         <input type="radio" class="btn-check" name="sort" id="sort-mostliked"
                value="@Enums.FeedSort.MostLiked" checked="@(Model.Sort == Enums.FeedSort.MostLiked)" />
         <label class="btn btn-outline-primary" for="sort-mostliked">Most Liked</label>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <input type="radio" class="btn-check" name="sort" id="sort-following"
+                   value="@Enums.FeedSort.Following" checked="@(Model.Sort == Enums.FeedSort.Following)" />
+            <label class="btn btn-outline-primary" for="sort-following">Following</label>
         
-        <input type="radio" class="btn-check" name="sort" id="sort-following"
-               value="@Enums.FeedSort.Following" checked="@(Model.Sort == Enums.FeedSort.Following)" />
-        <label class="btn btn-outline-primary" for="sort-following">Following</label>
+            <input type="radio" class="btn-check" name="sort" id="sort-followedby"
+                   value="@Enums.FeedSort.FollowedBy" checked="@(Model.Sort == Enums.FeedSort.FollowedBy)" />
+            <label class="btn btn-outline-primary" for="sort-followedby">Followed By</label>
         
-        <input type="radio" class="btn-check" name="sort" id="sort-followedby"
-               value="@Enums.FeedSort.FollowedBy" checked="@(Model.Sort == Enums.FeedSort.FollowedBy)" />
-        <label class="btn btn-outline-primary" for="sort-followedby">Followed By</label>
-        
-        <input type="radio" class="btn-check" name="sort" id="sort-friends"
-               value="@Enums.FeedSort.Friends" checked="@(Model.Sort == Enums.FeedSort.Friends)" />
-        <label class="btn btn-outline-primary" for="sort-friends">Friends</label>
+            <input type="radio" class="btn-check" name="sort" id="sort-friends"
+                   value="@Enums.FeedSort.Friends" checked="@(Model.Sort == Enums.FeedSort.Friends)" />
+            <label class="btn btn-outline-primary" for="sort-friends">Friends</label>
+        }
     </div>
 </form>
 

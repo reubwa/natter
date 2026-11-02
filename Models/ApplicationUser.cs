@@ -19,4 +19,7 @@ public class ApplicationUser : IdentityUser
     public string? Bio { get; set; }
     public ICollection<Post> Posts { get; set; } = new List<Post>();
     public ICollection<Like> Likes { get; set; } = new List<Like>();
+    
+    public ICollection<Follow> Followers { get; set; } = new List<Follow>();
+    public ICollection<Follow> Following  { get; set; } = new List<Follow>();
 }

@@ -11,6 +11,14 @@ public class HomeController(ApplicationDbContext db) : Controller
     {
         var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         
+        var followingIds = db.Follows
+            .Where(f => f.FollowerId == currentUserId)
+            .Select(f => f.FolloweeId);
+
+        var followerIds = db.Follows
+            .Where(f => f.FolloweeId == currentUserId)
+            .Select(f => f.FollowerId);
+        
         IQueryable<Post> query = db.Posts;
 
         switch (sort)
@@ -25,11 +33,18 @@ public class HomeController(ApplicationDbContext db) : Controller
                 query = query.OrderByDescending(p => p.Likes.Count).ThenByDescending(p => p.CreatedAt);
                 break;
             case Enums.FeedSort.Following:
-                throw new NotImplementedException();
+                query = query.Where(p => followingIds.Contains(p.AuthorId))
+                    .OrderByDescending(p => p.CreatedAt);
+                break;
             case Enums.FeedSort.FollowedBy:
-                throw new NotImplementedException();
+                query = query.Where(p => followerIds.Contains(p.AuthorId))
+                    .OrderByDescending(p => p.CreatedAt);
+                break;
             case Enums.FeedSort.Friends:
-                throw new NotImplementedException();
+                query = query.Where(p => followingIds.Contains(p.AuthorId)
+                                         && followerIds.Contains(p.AuthorId))
+                    .OrderByDescending(p => p.CreatedAt);
+                break;
             default:
                 query = query.OrderByDescending(p => p.CreatedAt);
                 break;
