@@ -4,7 +4,6 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 app.db
-/Data/Migrations
 /ScaffoldingReadMe.txt
 /Natter.csproj.user
 /app.db-wal
