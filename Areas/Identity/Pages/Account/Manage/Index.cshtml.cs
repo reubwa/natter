@@ -77,6 +77,9 @@ namespace Natter.Areas.Identity.Pages.Account.Manage
             
             [Display(Name = "Bio")]
             public string? Bio { get; set; }
+            
+            [Display(Name = "Profile Image")]
+            public string? ProfileImageUrl { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -93,7 +96,8 @@ namespace Natter.Areas.Identity.Pages.Account.Manage
                 LastName = user.LastName,
                 BirthDate = user.BirthDate,
                 ScreenName = user.ScreenName,
-                Bio = user.Bio
+                Bio = user.Bio,
+                ProfileImageUrl = user.ProfileImageUrl
             };
         }
 
@@ -146,6 +150,7 @@ namespace Natter.Areas.Identity.Pages.Account.Manage
             user.BirthDate = Input.BirthDate;
             user.ScreenName = Input.ScreenName;
             user.Bio = Input.Bio;
+            user.ProfileImageUrl = Input.ProfileImageUrl;
             await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

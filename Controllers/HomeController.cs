@@ -60,7 +60,8 @@ public class HomeController(ApplicationDbContext db) : Controller
                 AuthorScreenName = p.Author.ScreenName,
                 CanDelete = p.AuthorId == currentUserId,
                 LikeCount =  p.Likes.Count,
-                LikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId)
+                LikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId),
+                ProfileImageUrl = p.Author.ProfileImageUrl
             })
             .ToListAsync();
 

@@ -1,0 +1,26 @@
+@model ProfileViewModel
+
+<div class="d-flex flex-row align-items-left gap-2 mt-2 card mb-3">
+    @if (@Model.ProfileImageUrl is not null)
+    {
+        <img src="@Model.ProfileImageUrl" style="max-width: 150px;object-fit: fill;" class="rounded-start" alt="Profile Img"/>
+    }
+    <div class="card-body">
+        <h5 class="card-title">@Model.FirstName @Model.LastName</h5>
+        <a class="card-subtitle mb-2 text-muted" asp-controller="Profile" asp-action="Index"
+           asp-route-screenName="@Model.ScreenName">@Model.ScreenName</a>
+        <p class="card-text">@Model.Bio</p>
+        <div class="d-flex flex-row align-items-center gap-2 mt-2">
+            @if (!Model.IsOwnProfile && User.Identity?.IsAuthenticated == true)
+            {
+                <form asp-controller="Follows" asp-action="Toggle" asp-route-userId="@Model.UserId" method="post" class="mt-2 follow-form">
+                    <button type="submit" class="btn btn-sm btn-outline-primary">@(Model.IsFollowedByCurrentUser ? "Unfollow" : "Follow")</button>
+                </form>
+                if (Model.FollowsCurrentUser)
+                {
+                    <span class="badge text-bg-info">Follows You</span>
+                }
+            }
+        </div>
+    </div>
+</div>

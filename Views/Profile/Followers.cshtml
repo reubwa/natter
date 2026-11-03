@@ -1,0 +1,22 @@
+@model List<ProfileViewModel>
+
+@{
+    ViewData["Title"] = "Followers";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Followers</title>
+</head>
+<body>
+<div>
+    <h1>Followers</h1>
+    @foreach (var user in Model)
+    {
+        <partial name="_ProfileSlice" model="user"/>
+    }
+</div>
+</body>
+</html>

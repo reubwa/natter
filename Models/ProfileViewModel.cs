@@ -15,4 +15,5 @@ public class ProfileViewModel
     public int FollowingCount { get; set; }
     public bool IsFollowedByCurrentUser { get; set; }
     public bool FollowsCurrentUser { get; set; }
+    public string ProfileImageUrl { get; set; } = "";
 }

@@ -26,6 +26,7 @@ public class ProfileController(UserManager<ApplicationUser> userManager, Applica
             Bio =  user.Bio,
             IsOwnProfile = User.Identity?.Name == user.UserName,
             UserId = user.Id,
+            ProfileImageUrl = user.ProfileImageUrl,
             FollowerCount = await _db.Follows.CountAsync(f => f.FolloweeId == user.Id),
             FollowingCount = await _db.Follows.CountAsync(f => f.FollowerId == user.Id),
             IsFollowedByCurrentUser = currentUserId != null
@@ -47,10 +48,82 @@ public class ProfileController(UserManager<ApplicationUser> userManager, Applica
                 AuthorScreenName = p.Author.ScreenName,
                 CanDelete = p.AuthorId == currentUserId,
                 LikeCount =  p.Likes.Count,
-                LikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId)
+                LikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId),
+                ProfileImageUrl = p.Author.ProfileImageUrl
             })
             .ToListAsync();
         
         return View(vm);
+    }
+
+    [HttpGet("u/{screenName}/followers")]
+    public async Task<IActionResult> Followers(string screenName)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.ScreenName == screenName);
+        if (user == null) return NotFound();
+        
+        var followers = await _db.Follows.Where(f => f.FolloweeId == user.Id).ToListAsync();
+        List<ProfileViewModel> followersAP = [];
+        var currentUserId = _userManager.GetUserId(User);
+        foreach (var follower in followers)
+        {
+            var p = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == follower.FollowerId);
+            var vm = new ProfileViewModel
+            {
+                ScreenName = p.ScreenName,
+                FirstName = p.FirstName,
+                LastName = p.LastName,
+                BirthDate = p.BirthDate,
+                Bio =  p.Bio,
+                IsOwnProfile = User.Identity?.Name == p.UserName,
+                UserId = p.Id,
+                ProfileImageUrl = p.ProfileImageUrl,
+                FollowerCount = await _db.Follows.CountAsync(f => f.FolloweeId == p.Id),
+                FollowingCount = await _db.Follows.CountAsync(f => f.FollowerId == p.Id),
+                IsFollowedByCurrentUser = currentUserId != null
+                                          && await _db.Follows.AnyAsync(f => f.FollowerId == currentUserId && f.FolloweeId == p.Id),
+                FollowsCurrentUser = currentUserId != null
+                                     && await _db.Follows.AnyAsync(f => f.FollowerId == p.Id && f.FolloweeId == currentUserId)
+            };
+            followersAP.Add(vm);
+        }
+        
+        return View(followersAP);
+    }
+    
+    [HttpGet("u/{screenName}/following")]
+    public async Task<IActionResult> Following(string screenName)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.ScreenName == screenName);
+        if (user == null) return NotFound();
+        
+        var following = await _db.Follows.Where(f => f.FollowerId == user.Id).ToListAsync();
+        List<ProfileViewModel> followingAP = [];
+        var currentUserId = _userManager.GetUserId(User);
+        
+        foreach (var follow in following)
+        {
+            var p =  await _userManager.Users.FirstOrDefaultAsync(u => u.Id == follow.FolloweeId);  
+            var vm = new ProfileViewModel
+            {
+                ScreenName = p.ScreenName,
+                FirstName = p.FirstName,
+                LastName = p.LastName,
+                BirthDate = p.BirthDate,
+                Bio =  p.Bio,
+                IsOwnProfile = User.Identity?.Name == p.UserName,
+                UserId = p.Id,
+                ProfileImageUrl = p.ProfileImageUrl,
+                FollowerCount = await _db.Follows.CountAsync(f => f.FolloweeId == p.Id),
+                FollowingCount = await _db.Follows.CountAsync(f => f.FollowerId == p.Id),
+                IsFollowedByCurrentUser = currentUserId != null
+                                          && await _db.Follows.AnyAsync(f => f.FollowerId == currentUserId && f.FolloweeId == p.Id),
+                FollowsCurrentUser = currentUserId != null
+                                     && await _db.Follows.AnyAsync(f => f.FollowerId == p.Id && f.FolloweeId == currentUserId)
+            };
+            followingAP.Add(vm);
+        }
+        
+        return View(followingAP);
     }
 }

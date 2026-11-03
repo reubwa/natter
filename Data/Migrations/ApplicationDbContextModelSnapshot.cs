@@ -206,6 +206,10 @@ namespace Natter.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ProfileImageUrl")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ScreenName")
                         .HasMaxLength(100)
                         .HasColumnType("TEXT")

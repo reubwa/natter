@@ -17,6 +17,8 @@ public class ApplicationUser : IdentityUser
     public string? ScreenName { get; set; }
     [MaxLength(500)]
     public string? Bio { get; set; }
+    [MaxLength(2000)]
+    public string? ProfileImageUrl { get; set; }
     public ICollection<Post> Posts { get; set; } = new List<Post>();
     public ICollection<Like> Likes { get; set; } = new List<Like>();
     

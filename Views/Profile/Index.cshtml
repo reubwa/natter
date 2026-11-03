@@ -6,18 +6,28 @@
 <head>
 </head>
 <body>
-<div class="card p-4">
-    <h1>@Model.FirstName @Model.LastName</h1>
-    <div class="d-flex flex-row align-items-center gap-2 mt-2">
-        <p class="text-muted">@@@Model.ScreenName</p>
-        @if (Model.BirthDate != null)
+<div class="card p-4 mb-3">
+    <div class="d-flex flex-row align-items-left gap-3 mt-2">
+        @if (Model.ProfileImageUrl is not null)
         {
-            <p class="text-muted">Born on @Model.BirthDate.ToString()</p>
+            <img src="@Model.ProfileImageUrl" style="width: 150px;" alt="Profile Img"/>
         }
+        <div class="d-flex flex-column align-items-left gap-1 mt-2">
+            <h1>@Model.FirstName @Model.LastName</h1>
+            <div class="d-flex flex-row align-items-center gap-2 mt-2">
+                <p class="text-muted">@@@Model.ScreenName</p>
+                @if (Model.BirthDate != null)
+                {
+                    <p class="text-muted">Born on @Model.BirthDate.ToString()</p>
+                }
+            </div>
+        </div>
     </div>
     <div class="d-flex flex-row align-items-center gap-2 mt-2">
-        <p class="follower-count">@Model.FollowerCount followers</p>
-        <p>Following @Model.FollowingCount</p>
+        <a asp-controller="Profile" asp-action="Followers"
+           asp-route-screenName="@Model.ScreenName" class="follower-count">@Model.FollowerCount followers</a>
+        <a asp-controller="Profile" asp-action="Following"
+           asp-route-screenName="@Model.ScreenName">Following @Model.FollowingCount</a>
     </div>
     @if (!string.IsNullOrWhiteSpace(Model.Bio))
     {

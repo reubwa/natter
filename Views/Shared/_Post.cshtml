@@ -2,7 +2,11 @@
 @model PostViewModel
 @inject SignInManager<ApplicationUser> SignInManager
 
-<div class="card mb-3">
+<div class="d-flex flex-row align-items-left gap-2 mt-2 card mb-3">
+    @if (@Model.ProfileImageUrl is not null)
+    {
+        <img src="@Model.ProfileImageUrl" style="max-width: 150px;object-fit: fill;" class="rounded-start" alt="Profile Img"/>
+    }
     <div class="card-body">
         <div class="d-flex justify-content-between">
             <a asp-controller="Profile" asp-action="Index"
@@ -20,7 +24,7 @@
                     <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                 </form>
             }
-        
+
             @if (SignInManager.IsSignedIn(User))
             {
                 <form asp-controller="Posts" asp-action="ToggleLike" asp-route-postId="@Model.Id" method="post" class="mt-2 like-form">

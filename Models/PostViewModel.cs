@@ -9,4 +9,5 @@ public class PostViewModel
     public bool CanDelete { get; set; }
     public int LikeCount { get; set; }
     public bool LikedByCurrentUser { get; set; }
+    public string ProfileImageUrl { get; set; } = "";
 }
