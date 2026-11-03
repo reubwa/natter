@@ -4,3 +4,11 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 app.db
+/Data/Migrations
+/ScaffoldingReadMe.txt
+/Natter.csproj.user
+/app.db-wal
+/app.db-shm
+/.vs/Natter.slnx
+/.idea/.idea.Natter/.idea
+/Areas/Identity/Pages/Account/Manage/ManageNavPages.cs
