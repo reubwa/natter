@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Natter.Data;
@@ -66,6 +67,33 @@ public class HomeController(ApplicationDbContext db) : Controller
             .ToListAsync();
 
         return View(new HomeViewModel { Sort = sort, Posts = posts });
+    }
+
+    [Authorize]
+    public async Task<IActionResult> SuggestedFollows()
+    {
+        var me = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var iFollow = db.Follows
+            .Where(f => f.FollowerId == me)
+            .Select(f => f.FolloweeId);
+
+        var suggestions = await db.Users
+            .Where(u => u.Id != me && !iFollow.Contains(u.Id)) 
+            .Select(u => new SuggestedUserViewModel
+            {
+                UserId = u.Id,
+                ScreenName = u.ScreenName,
+                ProfileImageUrl = u.ProfileImageUrl,
+                MutualCount = u.Followers.Count(f => iFollow.Contains(f.FollowerId)),
+                FollowsMe = u.Following.Any(f => f.FolloweeId == me)
+            })
+            .Where(s => s.MutualCount > 0)
+            .OrderByDescending(s => s.MutualCount).ThenBy(_ => EF.Functions.Random())
+            .Take(10)
+            .ToListAsync();
+
+        return View(suggestions);
     }
 
     public IActionResult Privacy()

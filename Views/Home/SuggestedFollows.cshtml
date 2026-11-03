@@ -1,0 +1,43 @@
+@model List<SuggestedUserViewModel>
+
+@{
+    ViewData["Title"] = "Suggested Follows";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+</head>
+<body>
+<div>
+    <h1>Suggested Follows</h1>
+    @if (Model.Count == 0)
+    {
+        <p>No suggestions just yet! Follow some more people and some might show up here</p>
+    }
+    else
+    {
+        foreach (var user in Model)
+        {
+            <div class="d-flex flex-row align-items-left gap-2 mt-2 card mb-3">
+                @if (@user.ProfileImageUrl is not null)
+                {
+                    <img src="@user.ProfileImageUrl" style="max-width: 150px;object-fit: fill;" class="rounded-start" alt="Profile Img"/>
+                }
+                <div class="card-body">
+                    <a class="card-title mb-2 text-muted" asp-controller="Profile" asp-action="Index"
+                       asp-route-screenName="@user.ScreenName">@user.ScreenName</a>
+                    <div class="d-flex flex-row align-items-center gap-2 mt-2">
+                        @if (user.FollowsMe)
+                        {
+                            <span class="badge text-bg-info">Follows You</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+</body>
+</html>
