@@ -40,9 +40,12 @@
         }
         else
         {
-            <form asp-controller="Follows" asp-action="Toggle" asp-route-userId="@Model.UserId" method="post" class="mt-2 follow-form">
-                <button type="submit" class="btn btn-sm btn-outline-primary">@(Model.IsFollowedByCurrentUser ? "Unfollow" : "Follow")</button>
-            </form>
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                <form asp-controller="Follows" asp-action="Toggle" asp-route-userId="@Model.UserId" method="post" class="mt-2 follow-form">
+                    <button type="submit" class="btn btn-sm btn-outline-primary">@(Model.IsFollowedByCurrentUser ? "Unfollow" : "Follow")</button>
+                </form>
+            }
             if (Model.FollowsCurrentUser)
             {
                 <span class="badge text-bg-info">Follows You</span>
