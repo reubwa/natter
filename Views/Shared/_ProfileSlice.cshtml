@@ -7,7 +7,7 @@
     }
     <div class="card-body">
         <h5 class="card-title">@Model.FirstName @Model.LastName</h5>
-        <a class="card-subtitle mb-2 text-muted" asp-controller="Profile" asp-action="Index"
+        <a class="card-subtitle mb-2" asp-controller="Profile" asp-action="Index"
            asp-route-screenName="@Model.ScreenName">@Model.ScreenName</a>
         <p class="card-text">@Model.Bio</p>
         <div class="d-flex flex-row align-items-center gap-2 mt-2">

@@ -19,6 +19,7 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-color: color(display-p3 0.3 0.418 0.408);
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -28,4 +29,83 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+
+.navbar {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: color(display-p3 0.938 0.992 0.378);
+  background-color: color(display-p3 0.3 0.418 0.408);
+}
+
+.footer {
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: color(display-p3 0.938 0.992 0.378);
+  background-color: color(display-p3 0.3 0.418 0.408);
+}
+
+.navbar-brand, .nav-link, .nav-link:hover, .container, a, .form-control::placeholder, .form-control input::placeholder {
+  color: color(display-p3 0.938 0.992 0.378);
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+body .btn-primary {
+  background-color: color(display-p3 0.938 0.938 0.378);
+  color: color(display-p3 0.3 0.418 0.408);
+  border: 1px solid transparent;
+}
+
+body .btn-primary:hover {
+  background-color: color(display-p3 0.3 0.418 0.408);
+  border: 1px solid color(display-p3 0.938 0.938 0.378);
+  color: color(display-p3 0.938 0.938 0.378);
+}
+
+.btn-group .btn-outline-primary {
+  --bs-btn-color: color(display-p3 0.938 0.938 0.378);
+  --bs-btn-bg: color(display-p3 0.3 0.418 0.408);
+  --bs-btn-border-color: color(display-p3 0.938 0.938 0.378);
+  --bs-btn-hover-color: color(display-p3 0.3 0.418 0.408);
+  --bs-btn-hover-bg: color(display-p3 0.938 0.938 0.378);
+  --bs-btn-active-bg: color(display-p3 0.938 0.938 0.378);
+  --bs-btn-active-color: color(display-p3 0.3 0.418 0.408);
+  --bs-btn-active-hover-bg: color(display-p3 0.3 0.418 0.408);
+  --bs-btn-active-hover-color: color(display-p3 0.938 0.938 0.378);
+  --bs-btn-active-border-color: transparent;
+}
+
+.card {
+  --bs-card-bg: color(display-p3 0.3 0.418 0.408);
+  --bs-card-border-color: color(display-p3 0.938 0.938 0.378);
+  color: color(display-p3 0.938 0.938 0.378);
+  --bs-btn-bg: color(display-p3 0.3 0.418 0.408);
+  --bs-btn-border-color: color(display-p3 0.938 0.938 0.378);
+  --bs-btn-color: color(display-p3 0.938 0.938 0.378);
+  --bs-btn-hover-bg: color(display-p3 0.938 0.938 0.378);
+  --bs-btn-hover-border-color: color(display-p3 0.938 0.938 0.378);
+  --bs-btn-hover-color: color(display-p3 0.938 0.938 0.378);
+}
+
+body .btn-outline-primary {
+  color: color(display-p3 0.938 0.938 0.378);
+  background-color: color(display-p3 0.3 0.418 0.408);
+  border: 1px solid color(display-p3 0.938 0.938 0.378);
+}
+
+body .btn-outline-primary:hover {
+  background-color: color(display-p3 0.938 0.938 0.378);
+  border: 1px solid transparent;
+  color: color(display-p3 0.3 0.418 0.408);
+}
+
+body .form-control, body .form-control:focus {
+  border-width: 1px;
+  border-style: solid;
+  border-color: color(display-p3 0.938 0.938 0.378);
+  background-color: color(display-p3 0.3 0.418 0.408);
+  color: color(display-p3 0.938 0.938 0.378);
 }
