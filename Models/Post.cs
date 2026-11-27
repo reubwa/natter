@@ -15,4 +15,6 @@ public class Post
     public ApplicationUser Author { get; set; } = null!;
     
     public ICollection<Like> Likes { get; set; } = new List<Like>();
+    
+    public ICollection<Reply> Replies { get; set; } = new List<Reply>();
 }

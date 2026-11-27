@@ -53,6 +53,7 @@ public class HomeController(ApplicationDbContext db) : Controller
 
         var posts = await query
             .Take(50)
+            .Where(p => !(p is Reply))
             .Select(p => new PostViewModel
             {
                 Id = p.Id,
@@ -62,7 +63,9 @@ public class HomeController(ApplicationDbContext db) : Controller
                 CanDelete = p.AuthorId == currentUserId,
                 LikeCount =  p.Likes.Count,
                 LikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId),
-                ProfileImageUrl = p.Author.ProfileImageUrl
+                ProfileImageUrl = p.Author.ProfileImageUrl,
+                Replies = p.Replies,
+                ReplyCount = p.Replies.Count
             })
             .ToListAsync();
 

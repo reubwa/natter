@@ -40,6 +40,7 @@ public class ProfileController(UserManager<ApplicationUser> userManager, Applica
             .Where(p => p.AuthorId == user.Id)
             .OrderByDescending(p => p.CreatedAt)
             .Take(50)
+            .Where(p => !(p is Reply))
             .Select(p => new PostViewModel
             {
                 Id = p.Id,
@@ -49,7 +50,9 @@ public class ProfileController(UserManager<ApplicationUser> userManager, Applica
                 CanDelete = p.AuthorId == currentUserId,
                 LikeCount =  p.Likes.Count,
                 LikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId),
-                ProfileImageUrl = p.Author.ProfileImageUrl
+                ProfileImageUrl = p.Author.ProfileImageUrl,
+                Replies = p.Replies,
+                ReplyCount = p.Replies.Count
             })
             .ToListAsync();
         

@@ -297,11 +297,32 @@ namespace Natter.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId", "CreatedAt");
 
                     b.ToTable("Posts");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Post");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Natter.Models.Reply", b =>
+                {
+                    b.HasBaseType("Natter.Models.Post");
+
+                    b.Property<int>("ParentPostId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasIndex("ParentPostId");
+
+                    b.HasDiscriminator().HasValue("Reply");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -404,6 +425,17 @@ namespace Natter.Data.Migrations
                     b.Navigation("Author");
                 });
 
+            modelBuilder.Entity("Natter.Models.Reply", b =>
+                {
+                    b.HasOne("Natter.Models.Post", "ParentPost")
+                        .WithMany("Replies")
+                        .HasForeignKey("ParentPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ParentPost");
+                });
+
             modelBuilder.Entity("Natter.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Followers");
@@ -418,6 +450,8 @@ namespace Natter.Data.Migrations
             modelBuilder.Entity("Natter.Models.Post", b =>
                 {
                     b.Navigation("Likes");
+
+                    b.Navigation("Replies");
                 });
 #pragma warning restore 612, 618
         }

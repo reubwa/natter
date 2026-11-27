@@ -10,11 +10,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Post> Posts => Set<Post>();
     public DbSet<Like> Likes => Set<Like>();
     public DbSet<Follow> Follows => Set<Follow>();
+    public DbSet<Reply> Replies => Set<Reply>();
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
         builder.Entity<Post>()
             .HasIndex(p => new { p.AuthorId, p.CreatedAt });
+        builder.Entity<Reply>()
+            .HasOne(r => r.ParentPost)
+            .WithMany(p => p.Replies)
+            .HasForeignKey(r => r.ParentPostId)
+            .OnDelete(DeleteBehavior.Cascade);
         builder.Entity<ApplicationUser>()
             .Property(u => u.ScreenName)
             .UseCollation("NOCASE");

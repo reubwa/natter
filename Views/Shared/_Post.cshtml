@@ -30,8 +30,11 @@
                 <form asp-controller="Posts" asp-action="ToggleLike" asp-route-postId="@Model.Id" method="post" class="mt-2 like-form">
                     <button type="submit" class="btn btn-sm btn-outline-primary">@(Model.LikedByCurrentUser ? "Unlike" : "Like")</button>
                 </form>
+
+                <button class="btn btn-sm btn-outline-primary" style="margin-top: 7px;" data-reply-post="@Model.Id">Reply</button>
             }
             <span class="ms-auto like-count">@Model.LikeCount Likes</span>
+            <a>@Model.ReplyCount Replies</a>
         </div>
     </div>
 </div>

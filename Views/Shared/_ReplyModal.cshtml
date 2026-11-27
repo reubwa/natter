@@ -1,0 +1,38 @@
+@model ReplyViewModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
+<div class="modal-header">
+    <h5 class="modal-title">Replies</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+    <!-- the post, on top -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <h6 class="card-subtitle mb-1">@Model.parentPost.Author.ScreenName</h6>
+            <p class="card-text">@Model.parentPost.Content</p>
+        </div>
+    </div>
+
+    <!-- reply box -->
+    <form id="replyForm" asp-action="AddReply" asp-route-postId="@Model.parentPost.Id" method="post">
+        @Html.AntiForgeryToken()  <!-- or: <input type="hidden" name="__RequestVerificationToken" value="..." /> -->
+        <div class="mb-2">
+            <textarea name="content" id="replyContent" class="form-control" rows="2"
+                placeholder="Write a reply..." required maxlength="500"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Reply</button>
+        <span id="replyError" class="text-danger ms-2"></span>
+    </form>
+
+    <hr />
+
+    <!-- replies list -->
+    <div id="repliesList">
+        @foreach (var reply in Model.Replies)
+        {
+            <partial name="_ReplyItem" model="reply" />
+        }
+    </div>
+</div>

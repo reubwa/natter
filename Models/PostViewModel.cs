@@ -10,4 +10,6 @@ public class PostViewModel
     public int LikeCount { get; set; }
     public bool LikedByCurrentUser { get; set; }
     public string ProfileImageUrl { get; set; } = "";
+    public ICollection<Reply> Replies { get; set; } = new List<Reply>();
+    public int ReplyCount { get; set; }
 }

@@ -1,0 +1,11 @@
+@model Reply
+<div class="d-flex gap-2 mb-3" id="reply-@Model.Id">
+    <div class="flex-shrink-0">
+        <img src="@Model.Author.ProfileImageUrl" class="rounded-circle" width="36" height="36" alt="" />
+    </div>
+    <div>
+        <strong>@Model.Author.ScreenName</strong>
+        <small class="text-muted">@Model.CreatedAt.ToLocalTime().ToString("g")</small>
+        <div>@Model.Content</div>
+    </div>
+</div>

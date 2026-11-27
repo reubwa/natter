@@ -71,3 +71,35 @@ document.addEventListener('submit', async (e) => {
         button.disabled = false;
     }
 });
+
+const modalEl = document.getElementById('replyModal');
+const modal = new bootstrap.Modal(modalEl);
+const contentEl = document.getElementById('replyModalContent');
+
+document.querySelectorAll('[data-reply-post]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+        const res = await fetch(`/Replies/ReplyModal?postId=${btn.dataset.replyPost}`);
+        contentEl.innerHTML = await res.text();
+        wireReplyForm();
+        modal.show();
+    });
+});
+
+function wireReplyForm() {
+    const form = document.getElementById('replyForm');
+    if (!form) return;
+    form.addEventListener('submit', async e => {
+        e.preventDefault();
+        const err = document.getElementById('replyError');
+        err.textContent = '';
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form) });
+        if (res.ok) {
+            const html = await res.text();
+            document.getElementById('repliesList').insertAdjacentHTML('beforeend', html);
+            form.querySelector('textarea').value = '';
+            form.querySelector('textarea').focus();
+        } else {
+            err.textContent = (await res.text()) || 'Could not post reply.';
+        }
+    });
+}

@@ -59,7 +59,7 @@ body .btn-primary {
   border: 1px solid transparent;
 }
 
-body .btn-primary:hover {
+body .btn-primary:hover, .modal-header, .modal-body {
   background-color: color(display-p3 0.3 0.418 0.408);
   border: 1px solid color(display-p3 0.938 0.938 0.378);
   color: color(display-p3 0.938 0.938 0.378);
